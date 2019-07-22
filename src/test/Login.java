@@ -9,8 +9,12 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -20,44 +24,53 @@ public class Login {
 	
 	WebDriver driver;
 	LoginPage FPILogin;
+	TreeStructure LeftPane;
 	WebElement policy;
 	WebElement logOut;
 	
 	@BeforeTest
 	public void setup(){
-		System.setProperty("webdriver.chrome.driver", "E:\\chromedriver\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "D:\\apps\\Sheetal\\chromedriver\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		driver.get("https://uat.coaction.com/demo/");
+		driver.get("https://demo.coaction.com/demo/");
 	}
 	
 	@Test
 	public void LogintoMC() throws Exception {
 		FPILogin = new LoginPage(driver);
+		LeftPane = new TreeStructure(driver);
 		FPILogin.loginUser("fpiadmin", "admin123");
 		Date startTime = new Date();
 		System.out.println(startTime.toGMTString());
 		WebDriverWait wait = new WebDriverWait(driver, 180);
-		/*
-		 * logOut = FPILogin.getLogOutButton();
-		 * wait.until(ExpectedConditions.elementToBeClickable(logOut));
-		 */
-		//WebElement grid = driver.findElement(By.id("gwt-debug-11.1011.All Cases.openSupportGridSection.openSupportGridPanel.allCasesGrid.datagrid"));
-		//wait.until(ExpectedConditions.visibilityOf(grid));
-		
-		policy = FPILogin.getPolicyTreeNode();
-		((JavascriptExecutor)driver).executeScript("arguments[0].style.border='3px solid red'", policy);
-		//driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-		//Thread.sleep(60000);
-		
-		wait.until(ExpectedConditions.visibilityOf(policy)).click();
+		waitForPageLoaded();
+		wait.until(ExpectedConditions.elementToBeClickable(LeftPane.getPolicyTreeNode())).click();
 		Date endTime = new Date();
 		System.out.println(endTime.toGMTString());
 
-		policy.click();
-		
+	}
+
+	private void waitForPageLoaded() {
+
+		 @SuppressWarnings("deprecation")
+		Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+		 			.withTimeout(3,TimeUnit.MINUTES)
+		 			.pollingEvery(10,TimeUnit.SECONDS)
+		 			.ignoring(NoSuchElementException.class);
+		 
+		 wait.until(new Function<WebDriver, WebElement>() {
+			 public WebElement apply(WebDriver driver){
+				 return driver.findElement(By.xpath("//*[@id='gwt-debug-11.1011.My Cases.myCasesGridSection.myCasesGridPanel.myCasesGrid']"));
+			 }
+		});
+				 
+				
 		
 	}
+	
+	
+    
 
 }
