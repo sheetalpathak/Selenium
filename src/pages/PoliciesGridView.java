@@ -8,8 +8,19 @@ import org.openqa.selenium.support.PageFactory;
 public class PoliciesGridView {
 	
 	
-	@FindBy(xpath="gwt-debug-11.1011.All Policies.allPoliciesGridSection.allPoliciesGridPanel.allPoliciesGrid.accountNo[0]")
-	WebElement searchPolicy;
+	@FindBy(css="table[id='gwt-debug-11.1011.All Policies.allPoliciesGridSection.allPoliciesGridPanel.allPoliciesGrid']")
+	WebElement searchPolicyGrid;
+	
+	public WebElement getSearchPolicyGrid() {
+		return searchPolicyGrid;
+	}
+
+	@FindBy(xpath="//td[@id='gwt-debug-11.1011.All Policies.allPoliciesGridSection.allPoliciesGridPanel.allPoliciesGrid.gridfunctions-1']/img")
+	WebElement searchAction;
+	
+	public WebElement getSearchAction() {
+		return searchAction;
+	}
 
 	private WebDriver driver;
 	
@@ -17,5 +28,6 @@ public class PoliciesGridView {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 	}
+	
 
 }

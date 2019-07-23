@@ -18,10 +18,13 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.Reporter;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import pages.LoginPage;
+import pages.ModulePage;
+import pages.PoliciesGridView;
 import pages.TreeStructure;
 
 public class Login {
@@ -31,28 +34,31 @@ public class Login {
 	TreeStructure LeftPane;
 	WebElement policy;
 	WebElement logOut;
+	ModulePage supportModule;
+	
+	
 	
 	@BeforeTest
 	public void setup(){
 		System.setProperty("webdriver.chrome.driver", "D:\\apps\\Sheetal\\chromedriver\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		driver.get("https://demo.coaction.com/demo/");
 	}
 	
 	@Test
 	public void LogintoMC() throws Exception {
 		FPILogin = new LoginPage(driver);
-		LeftPane = new TreeStructure(driver);
+		supportModule = new ModulePage(driver);
 		FPILogin.loginUser("fpiadmin", "admin123");
-		Date startTime = new Date();
-		System.out.println(startTime.toGMTString());
 		WebDriverWait wait = new WebDriverWait(driver, 180);
-		waitForPageLoaded();
-		wait.until(ExpectedConditions.elementToBeClickable(LeftPane.getPolicyTreeNode())).click();
-		Date endTime = new Date();
-		System.out.println(endTime.toGMTString());
+		/*Date startTime = new Date();
+		System.out.println(startTime.toGMTString());*/
+		wait.until(ExpectedConditions.visibilityOf(supportModule.getSupportModule()));
+		Assert.assertTrue(supportModule.getSupportModule().isDisplayed());
+		Reporter.log("Login successfull");
+		
 
 	}
 
@@ -75,6 +81,17 @@ public class Login {
 	}
 	
 	
-    
+    @Test
+    public void searchPolicy(){
+    	LeftPane = new TreeStructure(driver);
+    	PoliciesGridView policy = new PoliciesGridView(driver);
+    	WebDriverWait wait = new WebDriverWait(driver, 180);
+    	waitForPageLoaded();
+		wait.until(ExpectedConditions.elementToBeClickable(LeftPane.getPolicyTreeNode())).click();
+		Assert.assertTrue(policy.getSearchPolicyGrid().isDisplayed());
+		Reporter.log("Policy grid is visible");
+		Date endTime = new Date();
+		System.out.println(endTime.toGMTString());
+    }
 
 }
