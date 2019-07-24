@@ -28,11 +28,11 @@
 	    <scope>test</scope>
 	</dependency>
   	<!-- https://mvnrepository.com/artifact/org.apache.maven.surefire/surefire-api -->
-	<dependency>
-	    <groupId>org.apache.maven.surefire</groupId>
-	    <artifactId>surefire-api</artifactId>
-	    <version>3.0.0-M3</version>
-	</dependency>
+<dependency>
+    <groupId>org.apache.maven.surefire</groupId>
+    <artifactId>surefire-api</artifactId>
+    <version>3.0.0-M3</version>
+</dependency>
   	
   </dependencies>
 </project>
