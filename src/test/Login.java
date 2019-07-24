@@ -6,13 +6,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
@@ -22,12 +19,14 @@ import org.testng.Reporter;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import framework.BaseDriver;
 import pages.LoginPage;
 import pages.ModulePage;
 import pages.PoliciesGridView;
 import pages.TreeStructure;
 
-public class Login {
+
+public class Login extends BaseDriver {
 	
 	WebDriver driver;
 	LoginPage FPILogin;
@@ -40,11 +39,7 @@ public class Login {
 	
 	@BeforeTest
 	public void setup(){
-		System.setProperty("webdriver.chrome.driver", "D:\\apps\\Sheetal\\chromedriver\\chromedriver.exe");
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-		driver.get("https://demo.coaction.com/demo/");
+		driver = getDriver();
 	}
 	
 	@Test
