@@ -5,7 +5,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class LoginPage {
+import framework.BasePage;
+
+public class LoginPage extends BasePage  {
+
+	public LoginPage(WebDriver driver) {
+		super(driver);
+	}
 
 	WebDriver driver;
 	
@@ -18,15 +24,12 @@ public class LoginPage {
 	@FindBy(css="img.loginBtn")
 	WebElement loginBtn;
 	
-	@FindBy(xpath = "//div[@id='gwt-debug-All Policies-content']//*[text()=' All Policies']")
-	WebElement PolicyTreeNode;
+	/*@FindBy(xpath = "//div[@id='gwt-debug-All Policies-content']//*[text()=' All Policies']")
+	WebElement PolicyTreeNode;*/
 	
 	@FindBy(css="div.mainPagetLogOutPanel")
 	WebElement LogOutButton;
 	
-	public WebElement getPolicyTreeNode() {
-		return PolicyTreeNode;
-	}
 	
 	public WebElement getLogOutButton() {
 		return LogOutButton;
@@ -49,10 +52,7 @@ public class LoginPage {
 		password.sendKeys(userPwd);
 	}
 
-	public LoginPage(WebDriver driver){ 
-		this.driver = driver; 
-		PageFactory.initElements(driver, this); 
-	 }
+	
 	
 	public void loginUser(String strUserName,String strPassword){
 		//Fill user name
