@@ -13,6 +13,11 @@ public class LoginPage extends BasePage  {
 		super(driver);
 	}
 
+	public LoginPage(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+	}
+
 	WebDriver driver;
 	
 	@FindBy(css="input.UserPassTextBox")

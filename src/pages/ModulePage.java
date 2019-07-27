@@ -13,6 +13,7 @@ public class ModulePage extends BasePage  {
 	
 	public ModulePage(WebDriver driver) {
 		super(driver);
+		PageFactory.initElements(driver, this);
 	}
 
 	

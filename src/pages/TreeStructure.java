@@ -8,7 +8,6 @@ import org.openqa.selenium.support.PageFactory;
 import framework.BasePage;
 
 public class TreeStructure extends BasePage {
-	
 	@FindBy(xpath = "//div[@id='gwt-debug-All Policies-content']//*[text()=' All Policies']")
 	WebElement PolicyTreeNode;
 	
@@ -19,6 +18,7 @@ public class TreeStructure extends BasePage {
 	
 	public TreeStructure(WebDriver driver) {
 		super(driver);
+		PageFactory.initElements(driver, this);
 	}
 
 	

@@ -3,61 +3,90 @@ package test;
 //
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+import org.testng.Reporter;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import framework.BaseDriver;
 import pages.LoginPage;
+import pages.ModulePage;
+import pages.PoliciesGridView;
+import pages.TreeStructure;
 
-public class Login {
+
+public class Login extends BaseDriver {
 	
 	WebDriver driver;
 	LoginPage FPILogin;
+	TreeStructure LeftPane;
 	WebElement policy;
 	WebElement logOut;
+	ModulePage supportModule;
+	
+	
 	
 	@BeforeTest
 	public void setup(){
-		System.setProperty("webdriver.chrome.driver", "E:\\chromedriver\\chromedriver.exe");
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		driver.get("https://uat.coaction.com/demo/");
+		driver = getDriver();
 	}
 	
 	@Test
 	public void LogintoMC() throws Exception {
 		FPILogin = new LoginPage(driver);
+		supportModule = new ModulePage(driver);
 		FPILogin.loginUser("fpiadmin", "admin123");
-		Date startTime = new Date();
-		System.out.println(startTime.toGMTString());
 		WebDriverWait wait = new WebDriverWait(driver, 180);
-		/*
-		 * logOut = FPILogin.getLogOutButton();
-		 * wait.until(ExpectedConditions.elementToBeClickable(logOut));
-		 */
-		//WebElement grid = driver.findElement(By.id("gwt-debug-11.1011.All Cases.openSupportGridSection.openSupportGridPanel.allCasesGrid.datagrid"));
-		//wait.until(ExpectedConditions.visibilityOf(grid));
+		/*Date startTime = new Date();
+		System.out.println(startTime.toGMTString());*/
+		wait.until(ExpectedConditions.visibilityOf(supportModule.getSupportModule()));
+		Assert.assertTrue(supportModule.getSupportModule().isDisplayed());
+		Reporter.log("Login successfull");
 		
-		policy = FPILogin.getPolicyTreeNode();
-		((JavascriptExecutor)driver).executeScript("arguments[0].style.border='3px solid red'", policy);
-		//driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-		//Thread.sleep(60000);
-		
-		wait.until(ExpectedConditions.visibilityOf(policy)).click();
-		Date endTime = new Date();
-		System.out.println(endTime.toGMTString());
 
-		policy.click();
-		
+	}
+
+	private void waitForPageLoaded() {
+
+		 @SuppressWarnings("deprecation")
+		Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+		 			.withTimeout(3,TimeUnit.MINUTES)
+		 			.pollingEvery(10,TimeUnit.SECONDS)
+		 			.ignoring(NoSuchElementException.class);
+		 
+		 wait.until(new Function<WebDriver, WebElement>() {
+			 public WebElement apply(WebDriver driver){
+				 return driver.findElement(By.xpath("//*[@id='gwt-debug-11.1011.My Cases.myCasesGridSection.myCasesGridPanel.myCasesGrid']"));
+			 }
+		});
+				 
+				
 		
 	}
+	
+	
+    @Test
+    public void searchPolicy(){
+    	LeftPane = new TreeStructure(driver);
+    	PoliciesGridView policy = new PoliciesGridView(driver);
+    	WebDriverWait wait = new WebDriverWait(driver, 180);
+    	waitForPageLoaded();
+		wait.until(ExpectedConditions.elementToBeClickable(LeftPane.getPolicyTreeNode())).click();
+		Assert.assertTrue(policy.getSearchPolicyGrid().isDisplayed());
+		Reporter.log("Policy grid is visible");
+		Date endTime = new Date();
+		System.out.println(endTime.toGMTString());
+    }
 
 }

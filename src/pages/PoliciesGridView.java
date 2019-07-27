@@ -8,8 +8,6 @@ import org.openqa.selenium.support.PageFactory;
 import framework.BasePage;
 
 public class PoliciesGridView extends BasePage {
-	
-	
 	@FindBy(css="table[id='gwt-debug-11.1011.All Policies.allPoliciesGridSection.allPoliciesGridPanel.allPoliciesGrid']")
 	WebElement searchPolicyGrid;
 	
@@ -28,6 +26,7 @@ public class PoliciesGridView extends BasePage {
 	
 	public PoliciesGridView(WebDriver driver) {
 		super(driver);
+		PageFactory.initElements(driver, this);
 	}
 	
 
